@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import UpdateIcon from '@material-ui/icons/Update';
+import UpdateIcon from '@mui/icons-material/Update';
 import { registerPlugin } from 'core/plugins/registry';
 
 export default () =>

@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { act } from 'react-dom/test-utils';
-import { cleanup, fireEvent, wait } from '@testing-library/react';
-import { useHistory, Route, Switch } from 'react-router';
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import fetchMock from 'fetch-mock';
 import YAML from 'yaml';
 import { renderWithWrapper } from 'utils/tests';
@@ -20,14 +20,14 @@ interface Props {
 }
 
 const TestBackfill: FC<Props> = ({ path }) => {
-  const { push } = useHistory();
-  useEffect(() => { push(path); }, [path, push]);
+  const navigate = useNavigate();
+  useEffect(() => { navigate(path); }, [path, navigate]);
   return (
     <TaskContainer.Provider>
       <AppBar toggleSidebar={jest.fn()} />
-      <Switch>
-        <Route path="/backfill"><Backfill /></Route>
-      </Switch>
+      <Routes>
+        <Route path="/backfill" element={<Backfill />} />
+      </Routes>
     </TaskContainer.Provider>
   );
 };
@@ -41,7 +41,7 @@ const taskConfig = {
 };
 
 const waitForConfig = (container: HTMLElement) =>
-  wait(
+  waitFor(
     () => {
       const el = getField(container, 'taskConfig');
       expect(el).not.toBeNull();
@@ -58,9 +58,9 @@ const TASK_SERIES_SELECT_INDEX = 1;
 // Open a MUI Select by DOM index and click the option matching `text`.
 // MUI renders the listbox into a portal so we query document directly.
 const pickSelectOption = async (container: HTMLElement, index: number, text: string) => {
-  const selectDiv = container.querySelectorAll('.MuiSelect-root')[index] as HTMLElement;
+  const selectDiv = container.querySelectorAll('.MuiSelect-select')[index] as HTMLElement;
   fireEvent.mouseDown(selectDiv);
-  await wait(() => {
+  await waitFor(() => {
     const options = Array.from(document.querySelectorAll('[role="option"]'));
     const option = options.find(el => el.textContent?.trim() === text);
     expect(option).not.toBeNull();
@@ -146,7 +146,7 @@ describe('plugins/backfill/Backfill', () => {
 
     it('shows "No task selected" in taskConfig when no task param', async () => {
       const { container } = renderWithWrapper(<TestBackfill path="/backfill" />);
-      await wait(() => expect(getField(container, 'taskConfig')).not.toBeNull());
+      await waitFor(() => expect(getField(container, 'taskConfig')).not.toBeNull());
       expect(getField(container, 'taskConfig')?.value).toBe('No task selected');
     });
 
@@ -179,13 +179,13 @@ describe('plugins/backfill/Backfill', () => {
       const { queryByText, container } = renderWithWrapper(
         <TestBackfill path="/backfill?task=no-series-task" />,
       );
-      await wait(() => {
+      await waitFor(() => {
         const el = getField(container, 'taskConfig');
         expect(el?.value).toContain('no-series-task');
       }, { timeout: 8000 });
       expect(queryByText('No series found in Source Task Config')).toBeInTheDocument();
       // The InputBase wrapping the Task Series Select should carry the Mui-disabled class
-      const seriesSelectRoot = container.querySelectorAll('.MuiSelect-root')[TASK_SERIES_SELECT_INDEX];
+      const seriesSelectRoot = container.querySelectorAll('.MuiSelect-select')[TASK_SERIES_SELECT_INDEX];
       expect(seriesSelectRoot.closest('.MuiInputBase-root')).toHaveClass('Mui-disabled');
       expect(getField(container, 'extras')).toBeInTheDocument();
     });
@@ -214,7 +214,7 @@ describe('plugins/backfill/Backfill', () => {
       // auto-update checkbox is already checked after config loads
       await pickSeriesOption(container, 'Breaking Bad');
 
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'taskName')?.value).toBe('test-task-breaking-bad-backfill'),
       );
     });
@@ -229,7 +229,7 @@ describe('plugins/backfill/Backfill', () => {
       // Recheck — should immediately update taskName with the already-selected series
       fireEvent.click(container.querySelectorAll('input[type="checkbox"]')[0] as HTMLElement);
 
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'taskName')?.value).toBe('test-task-the-wire-backfill'),
       );
     });
@@ -252,7 +252,7 @@ describe('plugins/backfill/Backfill', () => {
       // auto-update checkbox is already checked after config loads
       fireEvent.change(getField(container, 'extras')!, { target: { value: 'S01' } });
 
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'taskName')?.value).toBe('test-task-s01-backfill'),
       );
     });
@@ -263,13 +263,13 @@ describe('plugins/backfill/Backfill', () => {
 
       // auto-update checkbox is already checked after config loads
       await pickSeriesOption(container, 'Breaking Bad');
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'taskName')?.value).toBe('test-task-breaking-bad-backfill'),
       );
 
       fireEvent.change(getField(container, 'extras')!, { target: { value: 'S01' } });
 
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'taskName')?.value).toBe('test-task-breaking-bad-s01-backfill'),
       );
     });
@@ -289,7 +289,7 @@ describe('plugins/backfill/Backfill', () => {
 
       fireEvent.click(container.querySelectorAll('input[type="checkbox"]')[0] as HTMLElement);
 
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'taskName')?.value).toBe('test-task-breaking-bad-s01-backfill'),
       );
     });
@@ -313,7 +313,7 @@ describe('plugins/backfill/Backfill', () => {
         fireEvent.click(rssCheckboxContainer as HTMLElement);
       }
 
-      await wait(() =>
+      await waitFor(() =>
         expect(queryByText(/Please select the Query Param/)).toBeInTheDocument(),
       );
     });
@@ -324,13 +324,13 @@ describe('plugins/backfill/Backfill', () => {
 
       await pickSelectOption(container, QUERY_PARAM_SELECT_INDEX, 'q');
       await pickSeriesOption(container, 'Breaking Bad');
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'rssBackfillUrl')?.value).toContain('q=base+Breaking+Bad'),
       );
 
       // Switch param from 'q' to 'cat' — series should move to the new param
       await pickSelectOption(container, QUERY_PARAM_SELECT_INDEX, 'cat');
-      await wait(() => {
+      await waitFor(() => {
         const url = getField(container, 'rssBackfillUrl')?.value ?? '';
         expect(url).toContain('cat=1+Breaking+Bad');
         expect(url).not.toContain('q=base+Breaking+Bad');
@@ -348,7 +348,7 @@ describe('plugins/backfill/Backfill', () => {
       // should immediately update rssBackfillUrl using the already-set series
       await pickSelectOption(container, QUERY_PARAM_SELECT_INDEX, 'q');
 
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'rssBackfillUrl')?.value).toContain('q=base+Breaking+Bad'),
       );
     });
@@ -362,13 +362,13 @@ describe('plugins/backfill/Backfill', () => {
 
       // Select a series — encodedSeriesName becomes 'Breaking+Bad'
       await pickSeriesOption(container, 'Breaking Bad');
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'rssBackfillUrl')?.value).toContain('q=base+Breaking+Bad'),
       );
 
       // Type extras — encodedSeriesName becomes 'Breaking+Bad-S01'
       fireEvent.change(getField(container, 'extras')!, { target: { value: 'S01' } });
-      await wait(() =>
+      await waitFor(() =>
         expect(getField(container, 'rssBackfillUrl')?.value).toContain('q=base+Breaking+Bad-S01'),
       );
     });
@@ -387,7 +387,7 @@ describe('plugins/backfill/Backfill', () => {
         target: { value: 'http://new.example.com/rss' },
       });
 
-      await wait(() => {
+      await waitFor(() => {
         const config = getField(container, 'backfillTaskConfig')?.value ?? '';
         expect(config).toContain('http://new.example.com/rss');
       });
@@ -401,7 +401,7 @@ describe('plugins/backfill/Backfill', () => {
         target: { value: 'custom-task-name' },
       });
 
-      await wait(() => {
+      await waitFor(() => {
         const config = getField(container, 'backfillTaskConfig')?.value ?? '';
         expect(config).toContain('custom-task-name');
       });
@@ -418,12 +418,12 @@ describe('plugins/backfill/Backfill', () => {
       const { container, getByText } = renderWithWrapper(
         <TestBackfill path="/backfill" />,
       );
-      await wait(() => expect(getField(container, 'taskConfig')).not.toBeNull());
+      await waitFor(() => expect(getField(container, 'taskConfig')).not.toBeNull());
 
       const button = getByText('Backfill').closest('button')!;
       fireEvent.click(button);
 
-      await wait(() => {
+      await waitFor(() => {
         expect(fetchMock.called('/api/tasks', { method: 'post' })).toBe(false);
       });
     });
@@ -446,7 +446,7 @@ describe('plugins/backfill/Backfill', () => {
 
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => {
+      await waitFor(() => {
         const log = getField(container, 'executionLog')?.value ?? '';
         expect(log).toContain("Creating task 'test-task-backfill'...");
         expect(log).toContain("Task 'test-task-backfill' created.");
@@ -460,7 +460,7 @@ describe('plugins/backfill/Backfill', () => {
       // Simulate stream completion
       act(() => { capturedDoneCallback?.(); });
 
-      await wait(() => {
+      await waitFor(() => {
         const log = getField(container, 'executionLog')?.value ?? '';
         expect(log).toContain("Deleting task 'test-task-backfill'...");
         expect(log).toContain("Task 'test-task-backfill' deleted.");
@@ -478,7 +478,7 @@ describe('plugins/backfill/Backfill', () => {
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => expect(fetchMock.called('/api/tasks', { method: 'post' })).toBe(true));
+      await waitFor(() => expect(fetchMock.called('/api/tasks', { method: 'post' })).toBe(true));
 
       const createCalls = fetchMock
         .calls()
@@ -497,7 +497,7 @@ describe('plugins/backfill/Backfill', () => {
         target: { value: 'http://backfill.example.com/rss' },
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
-      await wait(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
+      await waitFor(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
 
       act(() => {
         capturedNodeHandlers['{progress}']?.({
@@ -505,7 +505,7 @@ describe('plugins/backfill/Backfill', () => {
         });
       });
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getField(container, 'executionLog')?.value).toContain('[input] rss');
       });
     });
@@ -519,7 +519,7 @@ describe('plugins/backfill/Backfill', () => {
         target: { value: 'http://backfill.example.com/rss' },
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
-      await wait(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
+      await waitFor(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
 
       act(() => {
         capturedNodeHandlers['{summary}']?.({
@@ -527,7 +527,7 @@ describe('plugins/backfill/Backfill', () => {
         });
       });
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getField(container, 'executionLog')?.value).toContain(
           'Summary: 3 accepted, 1 rejected, 0 failed',
         );
@@ -543,7 +543,7 @@ describe('plugins/backfill/Backfill', () => {
         target: { value: 'http://backfill.example.com/rss' },
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
-      await wait(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
+      await waitFor(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
 
       act(() => {
         capturedNodeHandlers['{summary}']?.({
@@ -551,7 +551,7 @@ describe('plugins/backfill/Backfill', () => {
         });
       });
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getField(container, 'executionLog')?.value).toContain(
           'Aborted: task failed to start',
         );
@@ -586,11 +586,11 @@ describe('plugins/backfill/Backfill', () => {
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => expect(getField(container, 'executionLog')?.value).toContain("Executing task 'custom-name'..."));
+      await waitFor(() => expect(getField(container, 'executionLog')?.value).toContain("Executing task 'custom-name'..."));
 
       act(() => { capturedDoneCallback?.(); });
 
-      await wait(() => {
+      await waitFor(() => {
         const log = getField(container, 'executionLog')?.value ?? '';
         expect(log).toContain("Deleting task 'custom-name'...");
         expect(log).toContain("Task 'custom-name' deleted.");
@@ -623,7 +623,7 @@ describe('plugins/backfill/Backfill', () => {
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => {
+      await waitFor(() => {
         const log = getField(container, 'executionLog')?.value ?? '';
         expect(log).toContain('Error creating task:');
       });
@@ -647,7 +647,7 @@ describe('plugins/backfill/Backfill', () => {
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getField(container, 'executionLog')?.value).toContain('Unknown error');
       });
     });
@@ -663,11 +663,11 @@ describe('plugins/backfill/Backfill', () => {
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
+      await waitFor(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
 
       act(() => { capturedFailCallback?.(); });
 
-      await wait(() => {
+      await waitFor(() => {
         const log = getField(container, 'executionLog')?.value ?? '';
         expect(log).toContain('Task execution failed.');
         expect(fetchMock.called('/api/tasks/test-task-backfill', { method: 'delete' })).toBe(true);
@@ -693,11 +693,11 @@ describe('plugins/backfill/Backfill', () => {
       });
       fireEvent.click(getByText('Backfill').closest('button')!);
 
-      await wait(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
+      await waitFor(() => expect(getField(container, 'executionLog')?.value).toContain("Executing"));
 
       act(() => { capturedDoneCallback?.(); });
 
-      await wait(() => {
+      await waitFor(() => {
         expect(getField(container, 'executionLog')?.value).toContain('Error deleting task:');
       });
     });

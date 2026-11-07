@@ -10,14 +10,15 @@ import {
   MenuItem,
   Paper,
   Select,
+  SelectChangeEvent,
   Theme,
   TextField as MuiTextField,
   Snackbar,
   Tooltip,
   Typography,
-} from '@material-ui/core';
-import { DragHandle, ExpandLess, ExpandMore } from '@material-ui/icons';
-import { css } from '@emotion/core';
+} from '@mui/material';
+import { DragHandle, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { css } from '@emotion/react';
 import YAML from 'yaml';
 import { useInjectPageTitle } from 'core/layout/AppBar/hooks';
 import { useFlexgetStream } from 'core/api';
@@ -43,12 +44,12 @@ import {
 // ---------------------------------------------------------------------------
 
 const wrapper = (theme: Theme) => css`
-  margin: ${theme.typography.pxToRem(theme.spacing(2))};
-  padding: ${theme.typography.pxToRem(theme.spacing(3))};
+  margin: ${theme.typography.pxToRem(parseFloat(theme.spacing(2)))};
+  padding: ${theme.typography.pxToRem(parseFloat(theme.spacing(3)))};
   display: grid;
   grid-template-columns: max-content 1fr;
-  column-gap: ${theme.typography.pxToRem(theme.spacing(3))};
-  row-gap: ${theme.typography.pxToRem(theme.spacing(3))};
+  column-gap: ${theme.typography.pxToRem(parseFloat(theme.spacing(3)))};
+  row-gap: ${theme.typography.pxToRem(parseFloat(theme.spacing(3)))};
   align-items: start;
 
   .MuiOutlinedInput-multiline {
@@ -71,7 +72,7 @@ const formLabel = (theme: Theme) => css`
 const inputRow = (theme: Theme) => css`
   display: flex;
   align-items: flex-start;
-  gap: ${theme.typography.pxToRem(theme.spacing(2))};
+  gap: ${theme.typography.pxToRem(parseFloat(theme.spacing(2)))};
 `;
 
 // ---------------------------------------------------------------------------
@@ -110,7 +111,7 @@ const LabeledBox: FC<LabeledBoxProps> = ({ label, style, children, ...rest }) =>
 );
 
 // One row of the two-column label/content grid.
-const FormRow: FC<{ label: React.ReactNode; spacing?: boolean }> = ({ label, children, spacing }) => (
+const FormRow: FC<{ label: React.ReactNode; spacing?: boolean; children?: React.ReactNode }> = ({ label, children, spacing }) => (
   <>
     <div css={formLabel} style={spacing ? { marginTop: 16 } : undefined}>{label}</div>
     <div style={spacing ? { marginTop: 16 } : undefined}>{children}</div>
@@ -255,7 +256,7 @@ const TaskSeriesField: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.sourceTaskName]);
 
-  const handleSeriesChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSeriesChange = (e: SelectChangeEvent<string>) => {
     const value = e.target.value as string;
     setFieldValue('selectedSeries', value);
     if (values.autoUpdateTaskName) {
