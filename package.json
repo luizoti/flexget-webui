@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/Flexget/webui",
   "devDependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^2.2.0",
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
@@ -136,5 +136,11 @@
     "uuid": "^3.3.3",
     "whatwg-fetch": "^3.0.0",
     "yaml": "^1.7.2"
+  },
+  "resolutions": {
+    "minimist": "^1.2.8",
+    "decode-uri-component": "^0.2.2",
+    "node-fetch": "^2.6.7",
+    "follow-redirects": "^1.14.8"
   }
 }

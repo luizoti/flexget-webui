@@ -1,7 +1,8 @@
 import { FC, useMemo, useState } from 'react';
 import { Formik } from 'formik';
-import { useNavigate, useHref } from 'react-router-dom';
-import { CheckCircle, Error } from '@mui/icons-material';
+import { useNavigate, useHref, Link } from 'react-router-dom';
+import { CheckCircle, Error, Update } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
 import { useInjectPageTitle } from 'core/layout/AppBar/hooks';
 import { Direction } from 'utils/query';
 import { useContainer } from 'unstated-next';
@@ -54,6 +55,10 @@ const headers = [
     id: SortByStatus.AbortReason,
     label: 'Abort Reason',
   },
+  {
+    id: SortByStatus.Backfill,
+    label: '',
+  },
 ];
 
 const Latest: FC = () => {
@@ -102,6 +107,18 @@ const Latest: FC = () => {
               <CheckCircle fontSize="small" color="primary" />
             ) : (
               <Error fontSize="small" color="error" />
+            ),
+            [SortByStatus.Backfill]: (
+              <Tooltip title="Backfill missing episodes for series in this task">
+                <IconButton
+                  size="small"
+                  component={Link}
+                  to={`/backfill?task=${encodeURIComponent(name)}`}
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
+                >
+                  <Update fontSize="small" />
+                </IconButton>
+              </Tooltip>
             ),
           },
           props: {
