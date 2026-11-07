@@ -24,7 +24,7 @@ const ShowList: FC<Props> = ({ options }) => {
       <Grid container spacing={2}>
         {shows.map(show => (
           <Grid item key={show.id} xs={12} md={6} lg={4}>
-            <ShowCard show={show} onRemoveClick={() => setShowId(showId)} />
+            <ShowCard show={show} onRemoveClick={() => setShowId(show.id)} />
           </Grid>
         ))}
       </Grid>

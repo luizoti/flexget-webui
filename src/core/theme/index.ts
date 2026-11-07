@@ -9,9 +9,26 @@ import lightEditorTheme from 'monaco-themes/themes/Tomorrow.json';
 import darkEditorTheme from 'monaco-themes/themes/Oceanic Next.json';
 
 export const ThemeContainer = createContainer(() => {
-  const [state, setState] = useState<PaletteMode>('light');
+  const [state, setState] = useState<PaletteMode>(() => {
+    try {
+      const stored = localStorage.getItem('flexget-theme');
+      return stored === 'dark' || stored === 'light' ? stored : 'light';
+    } catch {
+      return 'light';
+    }
+  });
 
-  const toggle = useCallback(() => setState(state === 'light' ? 'dark' : 'light'), [state]);
+  const toggle = useCallback(() => {
+    setState(prev => {
+      const next = prev === 'light' ? 'dark' : 'light';
+      try {
+        localStorage.setItem('flexget-theme', next);
+      } catch {
+        /* localStorage unavailable */
+      }
+      return next;
+    });
+  }, []);
 
   return [state, toggle] as const;
 });

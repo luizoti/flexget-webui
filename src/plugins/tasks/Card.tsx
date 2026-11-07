@@ -26,7 +26,7 @@ const Card: FC = () => {
         {!!taskStatuses.length && (
           <Typography>
             <b>Last Task Execution</b>: {taskStatuses[0].name} (
-            {new Date(taskStatuses[0].lastExecutionTime).toLocaleString()})
+            {new Date(taskStatuses[0].lastExecutionTime).toLocaleString('en-US')})
           </Typography>
         )}
       </LoadingSpinner>

@@ -3,6 +3,7 @@
 exports[`plugins/log/Header renders correctly 1`] = `
 .emotion-0 {
   display: block;
+  padding-bottom: 1.6rem;
 }
 
 @media (min-width:600px) {
@@ -69,6 +70,7 @@ exports[`plugins/log/Header renders correctly 1`] = `
   -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   font-size: 2.4rem;
+  margin-top: -2.4rem;
 }
 
 .emotion-6 {
@@ -107,10 +109,10 @@ exports[`plugins/log/Header renders correctly 1`] = `
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-transform: translate(14px, 16px) scale(1);
-  -moz-transform: translate(14px, 16px) scale(1);
-  -ms-transform: translate(14px, 16px) scale(1);
-  transform: translate(14px, 16px) scale(1);
+  -webkit-transform: translate(14px, 9px) scale(1);
+  -moz-transform: translate(14px, 9px) scale(1);
+  -ms-transform: translate(14px, 9px) scale(1);
+  transform: translate(14px, 9px) scale(1);
   -webkit-transition: color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,-webkit-transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,max-width 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
   transition: color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,max-width 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
   z-index: 1;
@@ -197,7 +199,8 @@ exports[`plugins/log/Header renders correctly 1`] = `
   animation-name: mui-auto-fill-cancel;
   -webkit-animation-duration: 10ms;
   animation-duration: 10ms;
-  padding: 16.5px 14px;
+  padding-top: 1px;
+  padding: 8.5px 14px;
 }
 
 .emotion-9::-webkit-input-placeholder {
@@ -337,7 +340,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
   line-height: 1.66;
   letter-spacing: 0.03333em;
   text-align: left;
-  margin-top: 3px;
+  margin-top: 4px;
   margin-right: 14px;
   margin-bottom: 0;
   margin-left: 14px;
@@ -395,6 +398,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
   color: rgba(55,71,79,0.54);
   -webkit-transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  margin-top: -2.4rem;
 }
 
 .emotion-13::-moz-focus-inner {
@@ -426,6 +430,23 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
 .emotion-13.Mui-disabled {
   background-color: transparent;
   color: rgba(55,71,79,0.26);
+}
+
+.emotion-14 {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  fill: currentColor;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-size: 2.4rem;
 }
 
 <div
@@ -464,7 +485,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
       className="MuiFormControl-root MuiTextField-root emotion-6"
     >
       <label
-        className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined emotion-7"
+        className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined emotion-7"
         data-shrink={false}
         htmlFor="query"
         id="query-label"
@@ -472,14 +493,14 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
         Filter
       </label>
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl emotion-8"
+        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall emotion-8"
         onClick={[Function]}
       >
         <input
           aria-describedby="query-helper-text"
           aria-invalid={false}
           autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input emotion-9"
+          className="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall emotion-9"
           disabled={false}
           id="query"
           name="query"
@@ -505,7 +526,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
         </fieldset>
       </div>
       <p
-        className="MuiFormHelperText-root MuiFormHelperText-sizeMedium MuiFormHelperText-contained emotion-12"
+        className="MuiFormHelperText-root MuiFormHelperText-sizeSmall MuiFormHelperText-contained emotion-12"
         id="query-helper-text"
       >
         Supports operators and, or, (), and "str"
@@ -532,7 +553,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .emotion-9:focus::-ms-input-p
     >
       <svg
         aria-hidden={true}
-        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium emotion-5"
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium emotion-14"
         data-testid="MoreVertIcon"
         focusable="false"
         viewBox="0 0 24 24"
