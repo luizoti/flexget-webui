@@ -1,3 +1,6 @@
+/* eslint-disable testing-library/no-wait-for-side-effects */
+/* eslint-disable testing-library/prefer-find-by */
+/* eslint-disable testing-library/no-wait-for-multiple-assertions */
 import React, { FC, useEffect } from 'react';
 import { act } from 'react-dom/test-utils';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';

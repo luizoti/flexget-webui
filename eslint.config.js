@@ -91,6 +91,8 @@ module.exports = tseslint.config(
       'react/jsx-props-no-spreading': 'off',
       'react/no-array-index-key': 'off',
       'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'off',
       'react/state-in-constructor': ['error', 'never'],
       'react/static-property-placement': 'off',
 
