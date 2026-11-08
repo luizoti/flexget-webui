@@ -56,8 +56,8 @@ describe('plugins/lists/base/entries', () => {
 
     describe('tabs', () => {
       it('should render tab list', async () => {
-        const { getByRole } = renderWithWrapper(<TestEntries />);
-        const tablist = getByRole('tablist');
+        const { findByRole } = renderWithWrapper(<TestEntries />);
+        const tablist = await findByRole('tablist');
         const tabs = await within(tablist).findAllByRole('tab');
         expect(tabs).toHaveLength(2);
 
@@ -69,8 +69,8 @@ describe('plugins/lists/base/entries', () => {
       });
 
       it('should allow selecting a tab', async () => {
-        const { getByRole } = renderWithWrapper(<TestEntries />);
-        const tablist = getByRole('tablist');
+        const { findByRole } = renderWithWrapper(<TestEntries />);
+        const tablist = await findByRole('tablist');
         const tabs = await within(tablist).findAllByRole('tab');
         fireEvent.click(tabs[1]);
         expect(tabs[0]).toHaveAttribute('aria-selected', 'false');
