@@ -65,3 +65,5 @@ junit.xml
 jsconfig.json
 docs/
 .vscode/changelists.json
+graphify-out
+.vscode
