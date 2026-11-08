@@ -24,7 +24,9 @@ module.exports = {
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.jest.json', diagnostics: { warnOnly: true } }],
+    '^.+\\.js$': ['ts-jest', { tsconfig: { allowJs: true, module: 'commonjs', esModuleInterop: true, skipLibCheck: true } }],
   },
+  transformIgnorePatterns: ['node_modules/(?!(uuid)/)'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
