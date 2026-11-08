@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
+import { Typography, Tooltip, IconButton } from '@mui/material';
+import { Check, Clear, DoneAll, ClearAll } from '@mui/icons-material';
 import { useFlexgetAPI } from 'core/api';
 import { Method } from 'utils/fetch';
 import { useContainer } from 'unstated-next';
-import { DoneAll, ClearAll } from '@mui/icons-material';
 import { PendingListEntry, Operation, SortBy } from './types';
-import { ActionsLeft, Actions } from './Card';
 import { createPluginContainer } from '../base/hooks/api';
 import { EntryContainer, actions } from '../base/hooks/entry';
 import { ListContainer } from '../base/hooks/list';
@@ -55,6 +55,42 @@ export const useEntryBulkOperation = () => {
     [dispatch, request, selectedIds],
   );
   return [state, doOperation] as const;
+};
+
+interface Props {
+  entry: PendingListEntry;
+}
+
+export const ActionsLeft: FC<Props> = ({ entry }) =>
+  entry.approved ? (
+    <Typography variant="overline" color="primary">
+      Approved
+    </Typography>
+  ) : null;
+
+export const Actions: FC<Props> = ({ entry }) => {
+  const [{ loading }, doOperation] = useEntryOperation(entry.id);
+  const { title, label, Icon, onClick } = entry.approved
+    ? {
+        title: 'Reject',
+        label: 'reject',
+        Icon: Clear,
+        onClick: () => doOperation(Operation.Reject),
+      }
+    : {
+        title: 'Approve',
+        label: 'approve',
+        Icon: Check,
+        onClick: () => doOperation(Operation.Approve),
+      };
+
+  return (
+    <Tooltip title={title} placement="top">
+      <IconButton aria-label={label} disabled={loading} onClick={onClick}>
+        <Icon />
+      </IconButton>
+    </Tooltip>
+  );
 };
 
 export const PendingListContainer = createPluginContainer(() => {
