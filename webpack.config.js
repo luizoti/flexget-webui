@@ -7,6 +7,29 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin');
 const webpack = require('webpack');
 const cfg = require('./package.json');
+const fs = require('fs');
+
+// Load variables from .env (if present) so `yarn start` / `npm start`
+// honor SERVER (and any other value) the same way Taskfile/run_server.sh do.
+const envPath = path.resolve(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  for (const rawLine of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+    if (!match) continue;
+    const key = match[1];
+    if (Object.prototype.hasOwnProperty.call(process.env, key)) continue;
+    let value = match[2].trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    process.env[key] = value;
+  }
+}
 
 const __DEBUG__ = !!process.env.DEBUG;
 const __DEV__ = process.env.NODE_ENV !== 'production';
