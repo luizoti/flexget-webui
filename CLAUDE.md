@@ -2,7 +2,7 @@
 
 ## Stack
 React 16 + TypeScript 4, Material UI v4, Emotion CSS, Formik, Webpack 4, Yarn 1.x.
-Run tests: `yarn test --no-coverage` (requires Node 16 via nvm).
+Run tests: `yarn test --no-coverage` (requires Node 22 via nvm).
 
 ## Plugin registration
 New plugins live in `src/plugins/<name>/`. Register in `src/Root.tsx` by importing

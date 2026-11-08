@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Minimum required versions
-NODE_MAJOR=16
+NODE_MAJOR=22
 YARN_VERSION="1.22.22"
 
 log() { echo "[setup] $*"; }
