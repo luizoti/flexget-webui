@@ -1,34 +1,44 @@
 {
-  "name": "flexget",
-  "version": "2.0.37.dev",
-  "description": "Flexget Web UI",
-  "main": "index.js",
-  "packageManager": "yarn@1.22.22",
-  "scripts": {
-    "start": "NODE_ENV=development webpack serve",
-    "build": "NODE_ENV=production webpack",
-    "debug": "DEBUG=true yarn build",
-    "lint": "eslint src",
-    "lint:css": "stylelint './src/**/*.js'",
-    "test": "NODE_ENV=test jest",
-    "test:watch": "jest --watch",
-    "release:bump": "NODE_ENV=release babel-node --extensions .ts ./scripts/bump-version.ts",
-    "release:upload": "NODE_ENV=release babel-node --extensions .ts ./scripts/create-release.ts",
-    "deploy:status": "NODE_ENV=release babel-node --extensions .ts ./scripts/set-deployment-status.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Flexget/webui.git"
+  "bugs": {
+    "url": "https://github.com/Flexget/webui/issues"
   },
   "contributors": [
     "Kristen Mills <kristen@kristen-mills.com>",
     "Steve Adamas <stevezau@gmail.com"
   ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Flexget/webui/issues"
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@babel/runtime-corejs3": "^7.5.5",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@loadable/component": "^5.11.0",
+    "@monaco-editor/react": "^4.6",
+    "@mui/icons-material": "^5",
+    "@mui/material": "^5",
+    "core-js": "^3.1.4",
+    "formik": "^2.4.0",
+    "humps": "^2.0.1",
+    "monaco-editor": "^0.50",
+    "monaco-themes": "^0.3.3",
+    "monaco-yaml": "^5",
+    "normalize.css": "^8.0.1",
+    "oboe": "^2.1.4",
+    "polished": "^3.4.2",
+    "qs": "^6.9.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-infinite-scroller": "^1.2.4",
+    "react-router-dom": "^6",
+    "react-virtualized": "^9.21.1",
+    "regenerator-runtime": "^0.13.3",
+    "semver": "^7.1.2",
+    "typeface-roboto": "0.0.75",
+    "unstated-next": "^1.1.0",
+    "uuid": "^14.0.3",
+    "whatwg-fetch": "^3.0.0",
+    "yaml": "^1.7.2"
   },
-  "homepage": "https://github.com/Flexget/webui",
+  "description": "Flexget Web UI",
   "devDependencies": {
     "@actions/core": "^1.9.1",
     "@actions/github": "^2.2.0",
@@ -102,42 +112,32 @@
     "webpack-cli": "^5",
     "webpack-dev-server": "^5"
   },
-  "dependencies": {
-    "@babel/runtime": "^7.5.5",
-    "@babel/runtime-corejs3": "^7.5.5",
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
-    "@loadable/component": "^5.11.0",
-    "@monaco-editor/react": "^4.6",
-    "@mui/icons-material": "^5",
-    "@mui/material": "^5",
-    "core-js": "^3.1.4",
-    "formik": "^2.4.0",
-    "humps": "^2.0.1",
-    "monaco-editor": "^0.50",
-    "monaco-themes": "^0.3.3",
-    "monaco-yaml": "^5",
-    "normalize.css": "^8.0.1",
-    "oboe": "^2.1.4",
-    "polished": "^3.4.2",
-    "qs": "^6.9.7",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-infinite-scroller": "^1.2.4",
-    "react-router-dom": "^6",
-    "react-virtualized": "^9.21.1",
-    "regenerator-runtime": "^0.13.3",
-    "semver": "^7.1.2",
-    "typeface-roboto": "0.0.75",
-    "unstated-next": "^1.1.0",
-    "uuid": "^14.0.3",
-    "whatwg-fetch": "^3.0.0",
-    "yaml": "^1.7.2"
+  "homepage": "https://github.com/Flexget/webui",
+  "license": "MIT",
+  "main": "index.js",
+  "name": "flexget",
+  "packageManager": "yarn@1.22.22",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flexget/webui.git"
   },
   "resolutions": {
-    "minimist": "^1.2.8",
     "decode-uri-component": "^0.2.2",
-    "node-fetch": "^2.6.7",
-    "follow-redirects": "^1.14.8"
-  }
+    "follow-redirects": "^1.14.8",
+    "minimist": "^1.2.8",
+    "node-fetch": "^2.6.7"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production webpack",
+    "debug": "DEBUG=true yarn build",
+    "deploy:status": "NODE_ENV=release babel-node --extensions .ts ./scripts/set-deployment-status.ts",
+    "lint": "eslint src",
+    "lint:css": "stylelint './src/**/*.js'",
+    "release:bump": "NODE_ENV=release babel-node --extensions .ts ./scripts/bump-version.ts",
+    "release:upload": "NODE_ENV=release babel-node --extensions .ts ./scripts/create-release.ts",
+    "start": "NODE_ENV=development webpack serve",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "jest --watch"
+  },
+  "version": "2.0.40.dev"
 }
