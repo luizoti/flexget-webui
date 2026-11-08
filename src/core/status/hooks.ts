@@ -1,6 +1,6 @@
 import { useCallback, useReducer, useEffect, Reducer, useRef } from 'react';
 import { createContainer, useContainer } from 'unstated-next';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import { action } from 'utils/hooks/actions';
 
 enum Constants {
